@@ -98,6 +98,12 @@
             <artifactId>quarkus-scheduler</artifactId>
         </dependency>
 
+        <!-- Context Propagation (propaga TenantContext entre threads) -->
+        <dependency>
+            <groupId>io.quarkus</groupId>
+            <artifactId>quarkus-smallrye-context-propagation</artifactId>
+        </dependency>
+
         <!-- Flyway para migrações -->
         <dependency>
             <groupId>io.quarkus</groupId>

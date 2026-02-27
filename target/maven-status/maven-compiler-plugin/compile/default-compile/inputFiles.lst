@@ -8,3 +8,4 @@
 /Users/edu/quarkusProject/src/main/java/com/example/multitenant/service/MessageProcessingService.java
 /Users/edu/quarkusProject/src/main/java/com/example/multitenant/tenant/CustomTenantResolver.java
 /Users/edu/quarkusProject/src/main/java/com/example/multitenant/tenant/TenantContext.java
+/Users/edu/quarkusProject/src/main/java/com/example/multitenant/tenant/TenantContextProvider.java

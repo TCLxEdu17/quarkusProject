@@ -4,6 +4,7 @@ import com.example.multitenant.entity.ProcessedMessage;
 import com.example.multitenant.messaging.SqsClientService;
 import com.example.multitenant.messaging.SqsMessageDTO;
 import com.example.multitenant.repository.ProcessedMessageRepository;
+import com.example.multitenant.tenant.TenantContext;
 import io.smallrye.mutiny.Uni;
 import io.smallrye.mutiny.infrastructure.Infrastructure;
 import jakarta.enterprise.context.ApplicationScoped;
@@ -11,14 +12,12 @@ import org.jboss.logging.Logger;
 
 /**
  * Serviço REATIVO que orquestra o processamento da mensagem:
- * 1. Seta o tenant no ThreadLocal
- * 2. Persiste no banco via repository bloqueante (runOnWorkerThread)
+ * 1. Seta o tenant no TenantContext (propagado automaticamente via Context Propagation)
+ * 2. Persiste no banco via repository (que resolve o tenant do TenantContext)
  * 3. Publica a mensagem processada na fila SQS de saída
- * 4. Limpa o TenantContext
  *
- * Ajuste: remover criação manual de virtual threads para garantir que o
- * contexto transacional e o TenantContext estejam presentes na mesma thread
- * em que o repositório é executado.
+ * Graças ao Context Propagation, o TenantContext é propagado automaticamente
+ * entre threads, sem necessidade de passar o tenant manualmente para cada método.
  */
 @ApplicationScoped
 public class MessageProcessingService {
@@ -35,10 +34,14 @@ public class MessageProcessingService {
 
     /**
      * Processa uma mensagem SQS de forma reativa.
-     * O bloco bloqueante (Hibernate ORM) roda na própria thread de subscription,
-     * garantindo que @Transactional e TenantContext sejam visíveis nessa thread.
+     * Seta o TenantContext no início — o Context Propagation garante que ele
+     * será propagado para todas as threads subsequentes do pipeline.
      */
     public Uni<ProcessedMessage> processMessage(SqsMessageDTO dto) {
+        // Seta o tenant ANTES de criar o pipeline reativo.
+        // O Context Propagation captura esse valor e o propaga para as threads do executor.
+        TenantContext.setCurrentTenant(dto.getTenantId());
+
         return Uni.createFrom().item(() -> {
                     LOG.infov("Processing message [{0}] for tenant [{1}] on thread [{2}]",
                             dto.getMessageId(), dto.getTenantId(), Thread.currentThread().getName());
@@ -49,14 +52,11 @@ public class MessageProcessingService {
                             dto.getTenantId()
                     );
 
-                    // repository.save() agora usa SessionFactory.withOptions().tenantIdentifier()
-                    // diretamente, sem depender de ThreadLocal
+                    // O repository resolve o tenant automaticamente do TenantContext propagado
                     return repository.save(entity);
                 })
-                // Executa o supplier em um executor gerenciado pelo Mutiny
                 .runSubscriptionOn(Infrastructure.getDefaultExecutor())
                 .flatMap(savedEntity -> {
-                    // Após persistir, publica na fila de saída (reativo)
                     SqsMessageDTO outputDto = new SqsMessageDTO(
                             savedEntity.getMessageId(),
                             savedEntity.getTenantId(),

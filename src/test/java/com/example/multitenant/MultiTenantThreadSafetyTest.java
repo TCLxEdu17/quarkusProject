@@ -33,9 +33,11 @@ import static org.junit.jupiter.api.Assertions.*;
  *
  * 1. Thread-safety: múltiplas threads processando mensagens de tenants diferentes
  *    simultaneamente NÃO misturam dados entre bancos.
- * 2. Cada mensagem é persistida no banco CORRETO (do seu tenant).
- * 3. Cada mensagem processada é publicada na fila de saída com o tenant correto.
- * 4. Nenhum tenant é "perdido" entre threads.
+ * 2. Context Propagation: o TenantContext é propagado automaticamente entre threads
+ *    pelo SmallRye Context Propagation, sem necessidade de passar tenant manualmente.
+ * 3. Cada mensagem é persistida no banco CORRETO (do seu tenant).
+ * 4. Cada mensagem processada é publicada na fila de saída com o tenant correto.
+ * 5. Nenhum tenant é "perdido" entre threads.
  *
  * Usa Testcontainers com:
  * - PostgreSQL (3 bancos: tenant_a, tenant_b, tenant_c)
@@ -82,15 +84,23 @@ class MultiTenantThreadSafetyTest {
         sqsConsumer.setEnabled(false);
     }
 
+    @AfterEach
+    void cleanup() {
+        // Garante que o TenantContext é limpo após cada teste
+        TenantContext.clear();
+    }
+
     /**
      * TESTE PRINCIPAL: envia 90 mensagens (30 por tenant) para a fila de entrada,
      * processa todas em paralelo com transformToUniAndMerge (max concurrency 20),
      * e valida que cada tenant recebeu suas 30 mensagens no banco correto e na fila de saída.
+     *
+     * Valida que o Context Propagation propaga o TenantContext corretamente entre threads.
      */
     @Test
     @Order(1)
-    void shouldProcessMessagesForCorrectTenantAcrossMultipleThreads() throws Exception {
-        LOG.info("=== STARTING MULTI-TENANT THREAD-SAFETY TEST ===");
+    void shouldProcessMessagesForCorrectTenantWithContextPropagation() throws Exception {
+        LOG.info("=== STARTING MULTI-TENANT CONTEXT PROPAGATION TEST ===");
         LOG.infov("Tenants: {0}, Messages per tenant: {1}, Total: {2}",
                 TENANTS, MESSAGES_PER_TENANT, TOTAL_MESSAGES);
 
@@ -124,7 +134,7 @@ class MultiTenantThreadSafetyTest {
         assertEquals(TOTAL_MESSAGES, sent, "All messages should be sent");
 
         // ── STEP 2: Processa todas as mensagens via polling ──
-        LOG.info("STEP 2: Processing messages from input queue...");
+        LOG.info("STEP 2: Processing messages from input queue (Context Propagation active)...");
         AtomicInteger totalProcessed = new AtomicInteger(0);
         Set<String> threadsUsed = ConcurrentHashMap.newKeySet();
 
@@ -139,7 +149,8 @@ class MultiTenantThreadSafetyTest {
                     if (messages != null && !messages.isEmpty()) {
                         LOG.infov("Received batch of {0} messages, processing...", messages.size());
 
-                        // Processa com transformToUniAndMerge
+                        // Processa com transformToUniAndMerge — o TenantContext é propagado
+                        // automaticamente para cada thread de processamento
                         sqsConsumer.processMessages(messages)
                                 .onItem().invoke(() -> {
                                     totalProcessed.incrementAndGet();
@@ -240,19 +251,19 @@ class MultiTenantThreadSafetyTest {
         assertEquals(new HashSet<>(TENANTS), allTenantsInOutput,
                 "Only expected tenants should appear in output");
 
-        LOG.info("=== MULTI-TENANT THREAD-SAFETY TEST PASSED ===");
+        LOG.info("=== MULTI-TENANT CONTEXT PROPAGATION TEST PASSED ===");
         LOG.infov("Total messages processed: {0}", TOTAL_MESSAGES);
         LOG.infov("Threads used: {0}", threadsUsed.size());
     }
 
     /**
-     * TESTE DE STRESS: envia mensagens intercaladas de tenants diferentes
-     * para maximizar a chance de race conditions.
+     * TESTE DE CONTEXT PROPAGATION: valida que o TenantContext é propagado corretamente
+     * quando mensagens de tenants diferentes são processadas em threads intercaladas.
      */
     @Test
     @Order(2)
-    void shouldHandleInterleavedTenantMessagesWithoutMixup() throws Exception {
-        LOG.info("=== STARTING INTERLEAVED TENANT TEST ===");
+    void shouldPropagateContextCorrectlyWithInterleavedTenantMessages() throws Exception {
+        LOG.info("=== STARTING INTERLEAVED CONTEXT PROPAGATION TEST ===");
 
         int messagesPerTenant = 10;
         List<SqsMessageDTO> interleavedMessages = new ArrayList<>();
@@ -275,7 +286,8 @@ class MultiTenantThreadSafetyTest {
 
         int expectedTotal = messagesPerTenant * TENANTS.size();
 
-        // Processa
+        // Processa — o Context Propagation garante que cada mensagem é processada
+        // com o TenantContext correto, mesmo em threads reutilizadas
         await().atMost(Duration.ofSeconds(60))
                 .pollInterval(Duration.ofSeconds(1))
                 .untilAsserted(() -> {
@@ -311,17 +323,18 @@ class MultiTenantThreadSafetyTest {
             }
         }
 
-        LOG.info("=== INTERLEAVED TENANT TEST PASSED ===");
+        LOG.info("=== INTERLEAVED CONTEXT PROPAGATION TEST PASSED ===");
     }
 
     /**
      * TESTE DE CONCORRÊNCIA MÁXIMA: dispara processamento de múltiplas threads Java
-     * simultaneamente para forçar race conditions no TenantContext.
+     * simultaneamente para forçar race conditions e validar que o Context Propagation
+     * mantém o TenantContext isolado em cada pipeline reativo.
      */
     @Test
     @Order(3)
     void shouldMaintainTenantIsolationUnderHighConcurrency() throws Exception {
-        LOG.info("=== STARTING HIGH CONCURRENCY TEST ===");
+        LOG.info("=== STARTING HIGH CONCURRENCY CONTEXT PROPAGATION TEST ===");
 
         int messagesPerTenant = 20;
         List<SqsMessageDTO> allMessages = new ArrayList<>();
@@ -388,7 +401,86 @@ class MultiTenantThreadSafetyTest {
             }
         }
 
-        LOG.info("=== HIGH CONCURRENCY TEST PASSED ===");
+        LOG.info("=== HIGH CONCURRENCY CONTEXT PROPAGATION TEST PASSED ===");
+    }
+
+    /**
+     * TESTE DE PROPAGAÇÃO DO REPOSITÓRIO: valida que o repositório resolve
+     * o tenant corretamente a partir do TenantContext propagado, sem receber
+     * tenant como parâmetro.
+     */
+    @Test
+    @Order(4)
+    void shouldResolveRepositoryTenantFromPropagatedContext() throws Exception {
+        LOG.info("=== STARTING REPOSITORY CONTEXT PROPAGATION TEST ===");
+
+        // Envia algumas mensagens para cada tenant e processa
+        int messagesPerTenant = 5;
+        for (String tenant : TENANTS) {
+            for (int i = 0; i < messagesPerTenant; i++) {
+                SqsMessageDTO dto = new SqsMessageDTO(
+                        "repo-ctx-" + tenant + "-" + i,
+                        tenant,
+                        "Repo context test " + tenant + " " + i
+                );
+                sqsClientService.sendToInputQueue(dto).await().atMost(Duration.ofSeconds(5));
+            }
+        }
+
+        // Processa
+        await().atMost(Duration.ofSeconds(60))
+                .pollInterval(Duration.ofSeconds(1))
+                .untilAsserted(() -> {
+                    List<Message> messages = sqsClientService.receiveMessages()
+                            .await().atMost(Duration.ofSeconds(5));
+                    if (messages != null && !messages.isEmpty()) {
+                        sqsConsumer.processMessages(messages)
+                                .collect().asList()
+                                .await().atMost(Duration.ofSeconds(15));
+                    }
+
+                    for (String tenant : TENANTS) {
+                        List<ProcessedMessage> msgs = findMessagesInTenantDb(tenant);
+                        long repoCount = msgs.stream()
+                                .filter(m -> m.getMessageId().startsWith("repo-ctx-" + tenant))
+                                .count();
+                        assertEquals(messagesPerTenant, (int) repoCount,
+                                "Tenant [" + tenant + "] should have " + messagesPerTenant + " repo-ctx messages");
+                    }
+                });
+
+        // Agora valida que o repositório resolve o tenant do TenantContext propagado
+        // (usando findAllByTenant sem parâmetro — o tenant vem do contexto)
+        for (String tenant : TENANTS) {
+            TenantContext.setCurrentTenant(tenant);
+            try {
+                List<ProcessedMessage> repoMessages = repository.findAllByTenant();
+                assertFalse(repoMessages.isEmpty(),
+                        "Repository should return messages for tenant [" + tenant + "] from propagated context");
+
+                for (ProcessedMessage pm : repoMessages) {
+                    assertEquals(tenant, pm.getTenantId(),
+                            "Repository should only return messages for the propagated tenant [" + tenant + "]");
+                }
+
+                long repoCtxCount = repoMessages.stream()
+                        .filter(m -> m.getMessageId().startsWith("repo-ctx-" + tenant))
+                        .count();
+                assertEquals(messagesPerTenant, repoCtxCount,
+                        "Repository should find all repo-ctx messages for tenant [" + tenant + "]");
+
+                LOG.infov("✓ Repository context propagation for [{0}]: {1} messages found", tenant, repoMessages.size());
+            } finally {
+                TenantContext.clear();
+            }
+        }
+
+        // Valida que repositório lança exceção quando TenantContext não está definido
+        TenantContext.clear();
+        assertThrows(IllegalStateException.class, () -> repository.findAllByTenant(),
+                "Repository should throw IllegalStateException when TenantContext is not set");
+
+        LOG.info("=== REPOSITORY CONTEXT PROPAGATION TEST PASSED ===");
     }
 
     // ── Helper methods ──

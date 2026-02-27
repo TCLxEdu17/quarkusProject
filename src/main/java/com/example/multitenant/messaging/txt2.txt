@@ -591,3 +591,4 @@
 13:44:05 INFO  [io.quarkus] (main) multitenant-sqs stopped in 0.017s
 
 Process finished with exit code 0
+te ch

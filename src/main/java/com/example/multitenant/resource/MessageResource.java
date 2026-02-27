@@ -20,6 +20,9 @@ import java.util.List;
  * Resource REATIVO para interação com a mini-app.
  * Permite enviar mensagens para a fila de entrada, consultar mensagens processadas
  * e disparar manualmente o processamento.
+ *
+ * O TenantContext é propagado automaticamente via Context Propagation,
+ * sem necessidade de passá-lo manualmente para os métodos do repositório.
  */
 @Path("/api/messages")
 @Produces(MediaType.APPLICATION_JSON)
@@ -82,18 +85,17 @@ public class MessageResource {
 
     /**
      * Consulta mensagens processadas de um tenant específico.
+     * Seta o TenantContext e o Context Propagation garante que ele será
+     * propagado para a thread de execução do repositório.
      */
     @GET
     @Path("/processed/{tenantId}")
     public Uni<List<ProcessedMessage>> getProcessedMessages(@PathParam("tenantId") String tenantId) {
-        return Uni.createFrom().item(() -> {
-            TenantContext.setCurrentTenant(tenantId);
-            try {
-                return repository.findAllByTenant(tenantId);
-            } finally {
-                TenantContext.clear();
-            }
-        }).runSubscriptionOn(command -> Thread.ofVirtual().start(command));
+        // Seta o tenant no contexto — o Context Propagation propaga automaticamente
+        TenantContext.setCurrentTenant(tenantId);
+
+        return Uni.createFrom().item(() -> repository.findAllByTenant())
+                .runSubscriptionOn(Infrastructure.getDefaultExecutor());
     }
 
     /**
@@ -107,4 +109,3 @@ public class MessageResource {
 
     public record SendResponse(String sqsMessageId, String tenantId) {}
 }
-

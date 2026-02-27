@@ -1,5 +1,6 @@
 com/example/multitenant/config/TenantConnectionResolverImpl$1.class
 com/example/multitenant/config/TenantConnectionResolverImpl.class
+com/example/multitenant/tenant/TenantContextProvider.class
 com/example/multitenant/tenant/CustomTenantResolver.class
 com/example/multitenant/repository/ProcessedMessageRepository.class
 com/example/multitenant/messaging/SqsMessageDTO.class

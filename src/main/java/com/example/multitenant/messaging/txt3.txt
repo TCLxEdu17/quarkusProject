@@ -1,0 +1,87 @@
+14:12:12 INFO  [co.ex.mu.MultiTenantThreadSafetyTest] (main) === STARTING REPOSITORY CONTEXT PROPAGATION TEST ===
+14:12:13 DEBUG [co.ex.mu.me.SqsClientService] (executor-thread-7) Received 10 messages from input queue
+14:12:13 INFO  [co.ex.mu.me.SqsConsumer] (awaitility-thread) Processing batch of 10 messages with max concurrency 20
+14:12:13 INFO  [co.ex.mu.se.MessageProcessingService] (executor-thread-7) Processing message [repo-ctx-tenant_a-0] for tenant [tenant_a] on thread [executor-thread-7]
+14:12:13 INFO  [co.ex.mu.re.ProcessedMessageRepository] (executor-thread-7) Saving message [repo-ctx-tenant_a-0] for tenant [tenant_a] on thread [executor-thread-7]
+14:12:13 INFO  [co.ex.mu.se.MessageProcessingService] (executor-thread-10) Processing message [repo-ctx-tenant_a-1] for tenant [tenant_a] on thread [executor-thread-10]
+14:12:13 INFO  [co.ex.mu.re.ProcessedMessageRepository] (executor-thread-10) Saving message [repo-ctx-tenant_a-1] for tenant [tenant_a] on thread [executor-thread-10]
+14:12:13 INFO  [co.ex.mu.se.MessageProcessingService] (executor-thread-3) Processing message [repo-ctx-tenant_a-2] for tenant [tenant_a] on thread [executor-thread-3]
+14:12:13 INFO  [co.ex.mu.re.ProcessedMessageRepository] (executor-thread-3) Saving message [repo-ctx-tenant_a-2] for tenant [tenant_a] on thread [executor-thread-3]
+14:12:13 INFO  [co.ex.mu.se.MessageProcessingService] (executor-thread-5) Processing message [repo-ctx-tenant_a-3] for tenant [tenant_a] on thread [executor-thread-5]
+14:12:13 INFO  [co.ex.mu.re.ProcessedMessageRepository] (executor-thread-5) Saving message [repo-ctx-tenant_a-3] for tenant [tenant_a] on thread [executor-thread-5]
+14:12:13 INFO  [co.ex.mu.se.MessageProcessingService] (executor-thread-1) Processing message [repo-ctx-tenant_a-4] for tenant [tenant_a] on thread [executor-thread-1]
+14:12:13 INFO  [co.ex.mu.re.ProcessedMessageRepository] (executor-thread-1) Saving message [repo-ctx-tenant_a-4] for tenant [tenant_a] on thread [executor-thread-1]
+14:12:13 INFO  [co.ex.mu.se.MessageProcessingService] (executor-thread-2) Processing message [repo-ctx-tenant_b-0] for tenant [tenant_b] on thread [executor-thread-2]
+14:12:13 INFO  [co.ex.mu.re.ProcessedMessageRepository] (executor-thread-2) Saving message [repo-ctx-tenant_b-0] for tenant [tenant_b] on thread [executor-thread-2]
+14:12:13 INFO  [co.ex.mu.se.MessageProcessingService] (executor-thread-8) Processing message [repo-ctx-tenant_b-1] for tenant [tenant_b] on thread [executor-thread-8]
+14:12:13 INFO  [co.ex.mu.re.ProcessedMessageRepository] (executor-thread-8) Saving message [repo-ctx-tenant_b-1] for tenant [tenant_b] on thread [executor-thread-8]
+14:12:13 INFO  [co.ex.mu.se.MessageProcessingService] (executor-thread-6) Processing message [repo-ctx-tenant_b-2] for tenant [tenant_b] on thread [executor-thread-6]
+14:12:13 INFO  [co.ex.mu.re.ProcessedMessageRepository] (executor-thread-6) Saving message [repo-ctx-tenant_b-2] for tenant [tenant_b] on thread [executor-thread-6]
+14:12:13 INFO  [co.ex.mu.se.MessageProcessingService] (executor-thread-4) Processing message [repo-ctx-tenant_b-3] for tenant [tenant_b] on thread [executor-thread-4]
+14:12:13 INFO  [co.ex.mu.re.ProcessedMessageRepository] (executor-thread-4) Saving message [repo-ctx-tenant_b-3] for tenant [tenant_b] on thread [executor-thread-4]
+14:12:13 INFO  [co.ex.mu.se.MessageProcessingService] (executor-thread-9) Processing message [repo-ctx-tenant_b-4] for tenant [tenant_b] on thread [executor-thread-9]
+14:12:13 INFO  [co.ex.mu.re.ProcessedMessageRepository] (executor-thread-9) Saving message [repo-ctx-tenant_b-4] for tenant [tenant_b] on thread [executor-thread-9]
+14:12:13 INFO  [co.ex.mu.me.SqsClientService] (executor-thread-2) Published processed message [repo-ctx-tenant_a-1] for tenant [tenant_a] to output queue. MessageId: 3317ca0f-7cf5-4b9e-a411-cc61a67a901f
+14:12:13 INFO  [co.ex.mu.se.MessageProcessingService] (executor-thread-2) Fully processed message [repo-ctx-tenant_a-1] for tenant [tenant_a]
+14:12:13 INFO  [co.ex.mu.me.SqsClientService] (executor-thread-9) Published processed message [repo-ctx-tenant_a-2] for tenant [tenant_a] to output queue. MessageId: a473a6e5-ab8d-49de-b1e7-a771cbcea00b
+14:12:13 INFO  [co.ex.mu.se.MessageProcessingService] (executor-thread-9) Fully processed message [repo-ctx-tenant_a-2] for tenant [tenant_a]
+14:12:13 INFO  [co.ex.mu.me.SqsClientService] (executor-thread-2) Published processed message [repo-ctx-tenant_a-0] for tenant [tenant_a] to output queue. MessageId: 34d4527e-5681-4c3f-a4ff-64d151bf231b
+14:12:13 INFO  [co.ex.mu.se.MessageProcessingService] (executor-thread-2) Fully processed message [repo-ctx-tenant_a-0] for tenant [tenant_a]
+14:12:13 INFO  [co.ex.mu.me.SqsClientService] (executor-thread-2) Published processed message [repo-ctx-tenant_b-3] for tenant [tenant_b] to output queue. MessageId: bad5afe5-2bfd-4d9a-a08f-a5d86fb028c9
+14:12:13 INFO  [co.ex.mu.se.MessageProcessingService] (executor-thread-2) Fully processed message [repo-ctx-tenant_b-3] for tenant [tenant_b]
+14:12:13 INFO  [co.ex.mu.me.SqsClientService] (executor-thread-4) Published processed message [repo-ctx-tenant_a-4] for tenant [tenant_a] to output queue. MessageId: 2a034e73-ebb6-47ee-a765-4a4a7e6b58c9
+14:12:13 INFO  [co.ex.mu.se.MessageProcessingService] (executor-thread-4) Fully processed message [repo-ctx-tenant_a-4] for tenant [tenant_a]
+14:12:13 INFO  [co.ex.mu.me.SqsClientService] (executor-thread-2) Published processed message [repo-ctx-tenant_b-4] for tenant [tenant_b] to output queue. MessageId: 202dcc63-b0d6-4cad-a2f9-112de75cd7ee
+14:12:13 INFO  [co.ex.mu.se.MessageProcessingService] (executor-thread-2) Fully processed message [repo-ctx-tenant_b-4] for tenant [tenant_b]
+14:12:13 INFO  [co.ex.mu.me.SqsClientService] (executor-thread-9) Published processed message [repo-ctx-tenant_a-3] for tenant [tenant_a] to output queue. MessageId: 4e5ce586-2bae-407e-a971-58b9779a1baf
+14:12:13 INFO  [co.ex.mu.se.MessageProcessingService] (executor-thread-9) Fully processed message [repo-ctx-tenant_a-3] for tenant [tenant_a]
+14:12:13 INFO  [co.ex.mu.me.SqsClientService] (executor-thread-8) Published processed message [repo-ctx-tenant_b-2] for tenant [tenant_b] to output queue. MessageId: cb6327f4-1964-4054-af94-df3e8e3fdb2b
+14:12:13 INFO  [co.ex.mu.se.MessageProcessingService] (executor-thread-8) Fully processed message [repo-ctx-tenant_b-2] for tenant [tenant_b]
+14:12:13 INFO  [co.ex.mu.me.SqsClientService] (executor-thread-6) Published processed message [repo-ctx-tenant_b-0] for tenant [tenant_b] to output queue. MessageId: 7ccfc6ce-1aa2-4118-91d7-9e282dd8c549
+14:12:13 INFO  [co.ex.mu.se.MessageProcessingService] (executor-thread-6) Fully processed message [repo-ctx-tenant_b-0] for tenant [tenant_b]
+14:12:13 INFO  [co.ex.mu.me.SqsClientService] (executor-thread-2) Published processed message [repo-ctx-tenant_b-1] for tenant [tenant_b] to output queue. MessageId: 44b038f7-0ccc-414a-aaf6-5b1e1e590241
+14:12:13 INFO  [co.ex.mu.se.MessageProcessingService] (executor-thread-2) Fully processed message [repo-ctx-tenant_b-1] for tenant [tenant_b]
+14:12:13 DEBUG [co.ex.mu.me.SqsConsumer] (executor-thread-2) Deleted message [df23c69f-8aef-4ee0-911a-049f5c2a06cb] from input queue
+14:12:13 DEBUG [co.ex.mu.me.SqsConsumer] (executor-thread-2) Deleted message [3a4f2dd7-d424-4aa6-9587-3ab2ab4ea8ef] from input queue
+14:12:13 DEBUG [co.ex.mu.me.SqsConsumer] (executor-thread-6) Deleted message [04a8d20e-6bfe-4283-822a-9a1d94592954] from input queue
+14:12:13 DEBUG [co.ex.mu.me.SqsConsumer] (executor-thread-6) Deleted message [0745640c-41a1-420b-a4b5-40c403600d53] from input queue
+14:12:13 DEBUG [co.ex.mu.me.SqsConsumer] (executor-thread-6) Deleted message [928254b1-ad7b-4579-9eee-b2892f42515d] from input queue
+14:12:13 DEBUG [co.ex.mu.me.SqsConsumer] (executor-thread-6) Deleted message [a6f65ca3-0183-4451-b4c4-3b9727606515] from input queue
+14:12:13 DEBUG [co.ex.mu.me.SqsConsumer] (executor-thread-6) Deleted message [993305ef-64f2-4499-b643-9f2487e5c2b2] from input queue
+14:12:13 DEBUG [co.ex.mu.me.SqsConsumer] (executor-thread-2) Deleted message [e35483f4-ec78-446f-8745-6eccb7782785] from input queue
+14:12:13 DEBUG [co.ex.mu.me.SqsConsumer] (executor-thread-6) Deleted message [e7694d7f-380d-43b9-9e7c-0e630572795e] from input queue
+14:12:13 DEBUG [co.ex.mu.me.SqsConsumer] (executor-thread-2) Deleted message [10f6b9db-15eb-423f-af9c-4083ba63aa18] from input queue
+14:12:14 DEBUG [co.ex.mu.me.SqsClientService] (executor-thread-2) Received 5 messages from input queue
+14:12:14 INFO  [co.ex.mu.me.SqsConsumer] (awaitility-thread) Processing batch of 5 messages with max concurrency 20
+14:12:14 INFO  [co.ex.mu.se.MessageProcessingService] (executor-thread-2) Processing message [repo-ctx-tenant_c-0] for tenant [tenant_c] on thread [executor-thread-2]
+14:12:14 INFO  [co.ex.mu.re.ProcessedMessageRepository] (executor-thread-2) Saving message [repo-ctx-tenant_c-0] for tenant [tenant_c] on thread [executor-thread-2]
+14:12:14 INFO  [co.ex.mu.se.MessageProcessingService] (executor-thread-4) Processing message [repo-ctx-tenant_c-2] for tenant [tenant_c] on thread [executor-thread-4]
+14:12:14 INFO  [co.ex.mu.se.MessageProcessingService] (executor-thread-6) Processing message [repo-ctx-tenant_c-1] for tenant [tenant_c] on thread [executor-thread-6]
+14:12:14 INFO  [co.ex.mu.se.MessageProcessingService] (executor-thread-8) Processing message [repo-ctx-tenant_c-3] for tenant [tenant_c] on thread [executor-thread-8]
+14:12:14 INFO  [co.ex.mu.re.ProcessedMessageRepository] (executor-thread-6) Saving message [repo-ctx-tenant_c-1] for tenant [tenant_c] on thread [executor-thread-6]
+14:12:14 INFO  [co.ex.mu.re.ProcessedMessageRepository] (executor-thread-8) Saving message [repo-ctx-tenant_c-3] for tenant [tenant_c] on thread [executor-thread-8]
+14:12:14 INFO  [co.ex.mu.re.ProcessedMessageRepository] (executor-thread-4) Saving message [repo-ctx-tenant_c-2] for tenant [tenant_c] on thread [executor-thread-4]
+14:12:14 INFO  [co.ex.mu.se.MessageProcessingService] (executor-thread-9) Processing message [repo-ctx-tenant_c-4] for tenant [tenant_c] on thread [executor-thread-9]
+14:12:14 INFO  [co.ex.mu.re.ProcessedMessageRepository] (executor-thread-9) Saving message [repo-ctx-tenant_c-4] for tenant [tenant_c] on thread [executor-thread-9]
+14:12:14 INFO  [co.ex.mu.me.SqsClientService] (executor-thread-9) Published processed message [repo-ctx-tenant_c-3] for tenant [tenant_c] to output queue. MessageId: 7c478d41-7428-4689-8dbf-ff897d47c469
+14:12:14 INFO  [co.ex.mu.se.MessageProcessingService] (executor-thread-9) Fully processed message [repo-ctx-tenant_c-3] for tenant [tenant_c]
+14:12:14 INFO  [co.ex.mu.me.SqsClientService] (executor-thread-6) Published processed message [repo-ctx-tenant_c-1] for tenant [tenant_c] to output queue. MessageId: e092ab1e-0ff5-4cb0-9875-12c23d9cbfce
+14:12:14 INFO  [co.ex.mu.se.MessageProcessingService] (executor-thread-6) Fully processed message [repo-ctx-tenant_c-1] for tenant [tenant_c]
+14:12:14 INFO  [co.ex.mu.me.SqsClientService] (executor-thread-9) Published processed message [repo-ctx-tenant_c-0] for tenant [tenant_c] to output queue. MessageId: b939b3e7-8b4d-48a3-b579-10fc8a68579b
+14:12:14 INFO  [co.ex.mu.se.MessageProcessingService] (executor-thread-9) Fully processed message [repo-ctx-tenant_c-0] for tenant [tenant_c]
+14:12:14 INFO  [co.ex.mu.me.SqsClientService] (executor-thread-6) Published processed message [repo-ctx-tenant_c-4] for tenant [tenant_c] to output queue. MessageId: ab08e296-6df8-4a81-9607-2a3715b85ae0
+14:12:14 INFO  [co.ex.mu.se.MessageProcessingService] (executor-thread-6) Fully processed message [repo-ctx-tenant_c-4] for tenant [tenant_c]
+14:12:14 INFO  [co.ex.mu.me.SqsClientService] (executor-thread-9) Published processed message [repo-ctx-tenant_c-2] for tenant [tenant_c] to output queue. MessageId: 779b789f-5316-4ce1-8ece-1bb62cc75fe4
+14:12:14 INFO  [co.ex.mu.se.MessageProcessingService] (executor-thread-9) Fully processed message [repo-ctx-tenant_c-2] for tenant [tenant_c]
+14:12:14 DEBUG [co.ex.mu.me.SqsConsumer] (executor-thread-9) Deleted message [61a6f7b7-ae4e-42c0-87b8-4b252521109c] from input queue
+14:12:14 DEBUG [co.ex.mu.me.SqsConsumer] (executor-thread-9) Deleted message [3847ff6a-271b-4016-9fba-8bd4fc80e7e6] from input queue
+14:12:14 DEBUG [co.ex.mu.me.SqsConsumer] (executor-thread-9) Deleted message [fc8a166d-b8e7-4785-8b84-0128a82588e1] from input queue
+14:12:14 DEBUG [co.ex.mu.me.SqsConsumer] (executor-thread-9) Deleted message [d433d875-452a-4b7d-9977-39f06209aca8] from input queue
+14:12:14 DEBUG [co.ex.mu.me.SqsConsumer] (executor-thread-9) Deleted message [943524eb-4914-452f-b266-397ba61c3b95] from input queue
+14:12:14 DEBUG [co.ex.mu.te.CustomTenantResolver] (main) Resolved tenant: tenant_a
+14:12:14 INFO  [co.ex.mu.MultiTenantThreadSafetyTest] (main) ✓ Repository context propagation for [tenant_a]: 65 messages found
+14:12:14 DEBUG [co.ex.mu.te.CustomTenantResolver] (main) Resolved tenant: tenant_b
+14:12:14 INFO  [co.ex.mu.MultiTenantThreadSafetyTest] (main) ✓ Repository context propagation for [tenant_b]: 65 messages found
+14:12:14 DEBUG [co.ex.mu.te.CustomTenantResolver] (main) Resolved tenant: tenant_c
+14:12:14 INFO  [co.ex.mu.MultiTenantThreadSafetyTest] (main) ✓ Repository context propagation for [tenant_c]: 65 messages found
+14:12:14 INFO  [co.ex.mu.MultiTenantThreadSafetyTest] (main) === REPOSITORY CONTEXT PROPAGATION TEST PASSED ===

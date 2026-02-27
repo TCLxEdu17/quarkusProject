@@ -1,0 +1,31 @@
+ -40
+edu@MacBook-Air-de-Luis quarkusProject % cd /Users/edu/quarkusProject && mvn clean test 2>&1 | tail -40
+12:02:33 INFO  [co.ex.mu.me.SqsClientService] (executor-thread-4) Published processed message [concurrent-tenant_a-16] for tenant [tenant_a] to output queue. MessageId: 8ab1cf17-c26e-4a20-b7d6-3a09f11addc6
+12:02:33 INFO  [co.ex.mu.se.MessageProcessingService] (executor-thread-4) Fully processed message [concurrent-tenant_a-16] for tenant [tenant_a]
+12:02:33 INFO  [co.ex.mu.me.SqsClientService] (executor-thread-1) Published processed message [concurrent-tenant_b-1] for tenant [tenant_b] to output queue. MessageId: 1fdd6171-4e5d-4df2-b955-a07414b821da
+12:02:33 INFO  [co.ex.mu.se.MessageProcessingService] (executor-thread-1) Fully processed message [concurrent-tenant_b-1] for tenant [tenant_b]
+12:02:33 INFO  [co.ex.mu.me.SqsClientService] (executor-thread-4) Published processed message [concurrent-tenant_c-0] for tenant [tenant_c] to output queue. MessageId: 39bbdc02-4d2a-4e99-909a-91604f40ca61
+12:02:33 INFO  [co.ex.mu.se.MessageProcessingService] (executor-thread-4) Fully processed message [concurrent-tenant_c-0] for tenant [tenant_c]
+12:02:33 INFO  [co.ex.mu.me.SqsClientService] (executor-thread-1) Published processed message [concurrent-tenant_b-5] for tenant [tenant_b] to output queue. MessageId: 871fece8-3af7-4af5-9165-43c0e7f9a825
+12:02:33 INFO  [co.ex.mu.se.MessageProcessingService] (executor-thread-1) Fully processed message [concurrent-tenant_b-5] for tenant [tenant_b]
+12:02:33 INFO  [co.ex.mu.me.SqsClientService] (executor-thread-9) Published processed message [concurrent-tenant_b-16] for tenant [tenant_b] to output queue. MessageId: a786a92e-be20-46fe-bc90-b1352035e689
+12:02:33 INFO  [co.ex.mu.se.MessageProcessingService] (executor-thread-9) Fully processed message [concurrent-tenant_b-16] for tenant [tenant_b]
+12:02:33 INFO  [co.ex.mu.me.SqsClientService] (executor-thread-9) Published processed message [concurrent-tenant_b-15] for tenant [tenant_b] to output queue. MessageId: 991af9bc-2bc3-496f-8d0c-ae9a4412a434
+12:02:33 INFO  [co.ex.mu.se.MessageProcessingService] (executor-thread-9) Fully processed message [concurrent-tenant_b-15] for tenant [tenant_b]
+12:02:33 INFO  [co.ex.mu.me.SqsClientService] (executor-thread-9) Published processed message [concurrent-tenant_c-2] for tenant [tenant_c] to output queue. MessageId: 67c129b0-cb59-4da5-9d5b-8989acafae82
+12:02:33 INFO  [co.ex.mu.se.MessageProcessingService] (executor-thread-9) Fully processed message [concurrent-tenant_c-2] for tenant [tenant_c]
+12:02:33 INFO  [co.ex.mu.me.SqsClientService] (executor-thread-1) Published processed message [concurrent-tenant_a-19] for tenant [tenant_a] to output queue. MessageId: 63c4fa92-e1e9-45f1-a390-7f66b772ca41
+12:02:33 INFO  [co.ex.mu.se.MessageProcessingService] (executor-thread-1) Fully processed message [concurrent-tenant_a-19] for tenant [tenant_a]
+12:02:33 DEBUG [co.ex.mu.me.SqsConsumer] (executor-thread-1) Deleted message [9eb8dee0-3bd6-4851-aa5a-5c76d58d2110] from input queue
+12:02:33 DEBUG [co.ex.mu.me.SqsConsumer] (executor-thread-1) Deleted message [571720c9-2394-47ba-b7d3-642a5766297b] from input queue
+12:02:33 DEBUG [co.ex.mu.me.SqsConsumer] (executor-thread-1) Deleted message [cb683960-ae40-445a-8d50-af824a5180f3] from input queue
+12:02:33 DEBUG [co.ex.mu.me.SqsConsumer] (executor-thread-1) Deleted message [61991049-108f-4776-98e3-ca845b082ba9] from input queue
+12:02:33 DEBUG [co.ex.mu.me.SqsConsumer] (executor-thread-1) Deleted message [fe5dc910-773d-480d-975f-754de71205f5] from input queue
+12:02:33 DEBUG [co.ex.mu.me.SqsConsumer] (executor-thread-1) Deleted message [079af8d3-6652-4644-8639-c03018b0c593] from input queue
+12:02:33 DEBUG [co.ex.mu.me.SqsConsumer] (executor-thread-1) Deleted message [5af5b0e4-45aa-434d-b94d-e2238576faba] from input queue
+12:02:33 DEBUG [co.ex.mu.me.SqsConsumer] (executor-thread-1) Deleted message [560307f6-7597-4992-99d8-49b37c4d3c07] from input queue
+12:02:33 DEBUG [co.ex.mu.me.SqsConsumer] (executor-thread-1) Deleted message [71e1969f-1a31-49dd-8be9-c4e1cf7f7038] from input queue
+12:02:33 DEBUG [co.ex.mu.me.SqsConsumer] (executor-thread-1) Deleted message [5a88e8d9-72ab-4b86-af2a-af2c42dce5e7] from input queue
+12:02:33 INFO  [co.ex.mu.MultiTenantThreadSafetyTest] (main) === HIGH CONCURRENCY TEST PASSED ===
+[INFO] Tests run: 3, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 53.88 s -- in com.example.multitenant.MultiTenantThreadSafetyTest
+12:02:33 INFO  [io.quarkus] (main) multitenant-sqs stopped in 0.021s

@@ -1,0 +1,10 @@
+/Users/edu/quarkusProject/src/main/java/com/example/multitenant/config/TenantConnectionResolverImpl.java
+/Users/edu/quarkusProject/src/main/java/com/example/multitenant/entity/ProcessedMessage.java
+/Users/edu/quarkusProject/src/main/java/com/example/multitenant/messaging/SqsClientService.java
+/Users/edu/quarkusProject/src/main/java/com/example/multitenant/messaging/SqsConsumer.java
+/Users/edu/quarkusProject/src/main/java/com/example/multitenant/messaging/SqsMessageDTO.java
+/Users/edu/quarkusProject/src/main/java/com/example/multitenant/repository/ProcessedMessageRepository.java
+/Users/edu/quarkusProject/src/main/java/com/example/multitenant/resource/MessageResource.java
+/Users/edu/quarkusProject/src/main/java/com/example/multitenant/service/MessageProcessingService.java
+/Users/edu/quarkusProject/src/main/java/com/example/multitenant/tenant/CustomTenantResolver.java
+/Users/edu/quarkusProject/src/main/java/com/example/multitenant/tenant/TenantContext.java
